@@ -1,19 +1,22 @@
 import {
-  getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
   User,
+  getAuth,
+  signInWithPopup,
+  signOut,
 } from 'firebase/auth';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { app } from '../services/firebase.config';
 
 type AuthGoogleProviderType = {
   user: User | null;
   signInGoogle: Function;
+  signOutGoogle: Function;
 };
 
 const AuthGoogleContext = createContext<AuthGoogleProviderType>({
   signInGoogle: () => {},
+  signOutGoogle: () => {},
   user: null,
 });
 
@@ -47,8 +50,18 @@ export const AuthGoogleProvider: React.FC<IProps> = ({ children }) => {
       });
   };
 
+  const signOutGoogle = () => {
+    signOut(auth)
+      .then(() => {
+        sessionStorage.removeItem('@AuthFirebase:token');
+        sessionStorage.removeItem('@AuthFirebase:user');
+        setUser(null);
+      })
+      .catch((error) => {});
+  };
+
   return (
-    <AuthGoogleContext.Provider value={{ user, signInGoogle }}>
+    <AuthGoogleContext.Provider value={{ user, signInGoogle, signOutGoogle }}>
       {children}
     </AuthGoogleContext.Provider>
   );
