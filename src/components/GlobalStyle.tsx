@@ -44,4 +44,15 @@ export const GlobalStyle = createGlobalStyle`
       background: var(--bg-2);
     }
   }
+
+  a {
+    color: inherit;
+    opacity: .9;
+    text-decoration: none;
+
+    :hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  }
 `;
