@@ -23,6 +23,10 @@ export const GlobalStyle = createGlobalStyle`
     gap: 10px;
   }
 
+  main {
+    flex-grow: 1;
+  }
+
   button {
     background: var(--bg-1);
     color: #fff;
