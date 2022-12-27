@@ -13,6 +13,7 @@ export type Character = {
 };
 
 export type Level = {
+  id: string;
   name: string;
   image: string;
   characters: Character[];
