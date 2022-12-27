@@ -1,10 +1,15 @@
+import { GlobalStyle } from './components/GlobalStyle';
+import Header from './components/Header';
 import { AuthGoogleProvider } from './contexts/AuthGoogleContext';
 
 function App() {
   return (
-    <AuthGoogleProvider>
-      <h1>Olá mundo</h1>
-    </AuthGoogleProvider>
+    <>
+      <GlobalStyle />
+      <AuthGoogleProvider>
+        <Header />
+      </AuthGoogleProvider>
+    </>
   );
 }
 
