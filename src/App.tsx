@@ -1,5 +1,16 @@
+import { GlobalStyle } from './components/GlobalStyle';
+import Header from './components/Header';
+import { AuthGoogleProvider } from './contexts/AuthGoogleContext';
+
 function App() {
-  return <h1>Olá mundo</h1>;
+  return (
+    <>
+      <GlobalStyle />
+      <AuthGoogleProvider>
+        <Header />
+      </AuthGoogleProvider>
+    </>
+  );
 }
 
 export default App;
