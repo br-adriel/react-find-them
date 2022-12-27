@@ -5,7 +5,7 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { app } from '../services/firebase.config';
 
 type AuthGoogleProviderType = {
@@ -26,6 +26,16 @@ interface IProps {
 
 export const AuthGoogleProvider: React.FC<IProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const loadStoreAuth = () => {
+      const sessionToken = sessionStorage.getItem('@AuthFirebase:token');
+      const sessionUser = sessionStorage.getItem('@AuthFirebase:user');
+      if (sessionToken && sessionUser) setUser(JSON.parse(sessionUser));
+    };
+
+    loadStoreAuth();
+  }, []);
 
   const provider = new GoogleAuthProvider();
   const auth = getAuth(app);
