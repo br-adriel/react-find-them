@@ -23,6 +23,10 @@ export const GlobalStyle = createGlobalStyle`
     gap: 10px;
   }
 
+  main {
+    flex-grow: 1;
+  }
+
   button {
     background: var(--bg-1);
     color: #fff;
@@ -42,6 +46,17 @@ export const GlobalStyle = createGlobalStyle`
     
     :hover {
       background: var(--bg-2);
+    }
+  }
+
+  a {
+    color: inherit;
+    opacity: .9;
+    text-decoration: none;
+
+    :hover {
+      opacity: 1;
+      text-decoration: underline;
     }
   }
 `;
