@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const HeaderTag = styled.header`
@@ -30,4 +31,9 @@ export const HeaderTag = styled.header`
       }
     }
   }
+`;
+
+export const LinkTag = styled(Link)`
+  opacity: 1 !important;
+  text-decoration: none !important;
 `;
