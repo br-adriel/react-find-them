@@ -9,7 +9,9 @@ const Header = () => {
   return (
     <S.HeaderTag>
       <Container>
-        <h1>FindThem!</h1>
+        <S.LinkTag to='/'>
+          <h1>FindThem!</h1>
+        </S.LinkTag>
         {user ? (
           <div>
             <img
