@@ -38,6 +38,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         return {
           ...doc.data(),
           id: doc.id,
+          found: false,
         };
       }) as Character[];
       return characters;

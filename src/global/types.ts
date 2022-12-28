@@ -1,5 +1,7 @@
 export type Character = {
   id: string;
+  image: string;
+  found: boolean;
   position: {
     start: {
       x: number;
