@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const LevelsGrid = styled.div`
-  padding: 0 10px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
