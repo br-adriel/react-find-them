@@ -20,11 +20,14 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 10px;
   }
 
   main {
     flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
   }
 
   button {
