@@ -1,4 +1,4 @@
-import { Outlet } from 'react-bootstrap-icons';
+import { Outlet } from 'react-router-dom';
 import Footer from './components/Footer';
 import { GlobalStyle } from './components/GlobalStyle';
 import Header from './components/Header';
