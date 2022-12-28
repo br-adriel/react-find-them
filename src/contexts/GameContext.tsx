@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { Level } from '../global/types';
+import { Character, Level } from '../global/types';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../services/firebase.config';
 
@@ -26,16 +26,36 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
   const [levels, setLevels] = useState<Level[]>([]);
 
   useEffect(() => {
-    const loadLevels = async () => {
-      const collectionRef = collection(db, 'levels');
-      const data = await getDocs(collectionRef);
-      const fetchedLlevels = data.docs.map((doc) => {
+    const fetchCharacters = async (levelId: string) => {
+      const collectionCharacterRef = collection(
+        db,
+        'levels',
+        levelId,
+        'characters'
+      );
+      const data = await getDocs(collectionCharacterRef);
+      const characters = data.docs.map((doc) => {
         return {
           ...doc.data(),
           id: doc.id,
         };
-      }) as Level[];
-      setLevels(fetchedLlevels);
+      }) as Character[];
+      return characters;
+    };
+    const loadLevels = async () => {
+      const collectionRef = collection(db, 'levels');
+      const data = await getDocs(collectionRef);
+      const fetchedLevels = await Promise.all(
+        data.docs.map(async (doc) => {
+          const characters = await fetchCharacters(doc.id);
+          return {
+            ...doc.data(),
+            id: doc.id,
+            characters,
+          } as unknown as Level;
+        })
+      );
+      setLevels(fetchedLevels);
     };
 
     loadLevels();
