@@ -1,8 +1,9 @@
 import { useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import CharacterBar from '../components/CharacterBar';
+import GameImage from '../components/GameImage';
 import GameContext from '../contexts/GameContext';
 import Container from '../components/Container';
-import CharacterBar from '../components/CharacterBar';
-import { useParams } from 'react-router-dom';
 
 const PlayLevel = () => {
   const { levels, setSelectedLevel } = useContext(GameContext);
@@ -17,6 +18,7 @@ const PlayLevel = () => {
   return (
     <Container>
       <CharacterBar />
+      <GameImage />
     </Container>
   );
 };
