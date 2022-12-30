@@ -8,6 +8,7 @@ type GameContextProviderType = {
   selectedLevel: Level | null;
   setLevels: Function;
   setSelectedLevel: Function;
+  clickLevelImage: Function;
 };
 
 const GameContext = createContext<GameContextProviderType>({
@@ -15,6 +16,7 @@ const GameContext = createContext<GameContextProviderType>({
   selectedLevel: null,
   setLevels: () => {},
   setSelectedLevel: () => {},
+  clickLevelImage: () => {},
 });
 
 interface IProps {
@@ -62,9 +64,42 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
     loadLevels();
   }, []);
 
+  const clickLevelImage = (x: number, y: number) => {
+    if (selectedLevel && selectedLevel.characters) {
+      for (let character of selectedLevel.characters) {
+        if (character.position.start.x <= x && x <= character.position.end.x) {
+          if (
+            character.position.start.y <= y &&
+            y <= character.position.end.y
+          ) {
+            setSelectedLevel((prev) => {
+              if (!prev) return null;
+              return {
+                ...prev,
+                characters: prev?.characters.map((ch) => {
+                  if (ch.id === character.id) {
+                    character.found = true;
+                    return character;
+                  }
+                  return ch;
+                }),
+              };
+            });
+          }
+        }
+      }
+    }
+  };
+
   return (
     <GameContext.Provider
-      value={{ levels, selectedLevel, setLevels, setSelectedLevel }}
+      value={{
+        levels,
+        selectedLevel,
+        setLevels,
+        setSelectedLevel,
+        clickLevelImage,
+      }}
     >
       {children}
     </GameContext.Provider>
