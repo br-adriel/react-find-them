@@ -1,8 +1,9 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { Character, Level } from '../global/types';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../services/firebase.config';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { StopwatchResult, useStopwatch } from 'react-timer-hook';
+import { Character, Level, Match } from '../global/types';
+import { db } from '../services/firebase.config';
+import AuthGoogleContext from './AuthGoogleContext';
 
 type GameContextProviderType = {
   levels: Level[];
@@ -11,6 +12,7 @@ type GameContextProviderType = {
   setSelectedLevel: Function;
   clickLevelImage: Function;
   timer: StopwatchResult;
+  match: Match;
 };
 
 const GameContext = createContext<GameContextProviderType>({
@@ -20,6 +22,7 @@ const GameContext = createContext<GameContextProviderType>({
   setSelectedLevel: () => {},
   clickLevelImage: () => {},
   timer: {} as StopwatchResult,
+  match: {} as Match,
 });
 
 interface IProps {
@@ -30,6 +33,8 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
   const [levels, setLevels] = useState<Level[]>([]);
   const timer = useStopwatch({ autoStart: false });
+  const [match, setMatch] = useState({ points: 0 } as Match);
+  const { user } = useContext(AuthGoogleContext);
 
   useEffect(() => {
     const fetchCharacters = async (levelId: string) => {
@@ -70,6 +75,13 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
 
   const finishLevel = () => {
     timer.pause();
+    setMatch((prev) => {
+      return {
+        ...prev,
+        level: selectedLevel,
+        player: user,
+      };
+    });
   };
 
   useEffect(() => {
@@ -87,6 +99,10 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
 
   const clickLevelImage = (x: number, y: number) => {
     if (selectedLevel && selectedLevel.characters) {
+      let clickTime = timer.minutes * 60 + timer.seconds;
+      let clickedOnCharacter = false;
+      if (clickTime > 200) clickTime = 200;
+
       for (let character of selectedLevel.characters) {
         if (
           character.position.start.x <= x &&
@@ -94,6 +110,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
           character.position.start.y <= y &&
           y <= character.position.end.y
         ) {
+          clickedOnCharacter = true;
           setSelectedLevel((prev) => {
             if (!prev) return null;
             return {
@@ -109,6 +126,15 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
           });
         }
       }
+
+      setMatch((prev) => {
+        return {
+          ...prev,
+          points:
+            prev.points +
+            (clickedOnCharacter ? 1500 + 200 - clickTime : -150 - clickTime),
+        };
+      });
     }
   };
 
@@ -121,6 +147,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         setSelectedLevel,
         clickLevelImage,
         timer,
+        match,
       }}
     >
       {children}

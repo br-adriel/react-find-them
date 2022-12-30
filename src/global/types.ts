@@ -1,3 +1,5 @@
+import { User } from '@firebase/auth';
+
 export type Character = {
   id: string;
   image: string;
@@ -19,4 +21,10 @@ export type Level = {
   name: string;
   image: string;
   characters: Character[];
+};
+
+export type Match = {
+  level: Level | null;
+  points: number;
+  player: User | null;
 };
