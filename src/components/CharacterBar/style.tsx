@@ -9,9 +9,7 @@ export const Wrapper = styled.div`
   padding: 10px;
   border-radius: 5px;
   color: #fff;
-  position: sticky;
-  top: 0;
-  margin-bottom: 10px;
+  flex-grow: 1;
 `;
 
 export const CharacterImage = styled.img<{ found: boolean }>`
