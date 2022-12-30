@@ -1,9 +1,9 @@
-import React, { SyntheticEvent, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import GameContext from '../contexts/GameContext';
 
 const GameImage = () => {
-  const { selectedLevel, clickLevelImage } = useContext(GameContext);
+  const { selectedLevel, clickLevelImage, timer } = useContext(GameContext);
   const clickImage = (e: React.MouseEvent<HTMLImageElement>) => {
     const xClick = e.nativeEvent.offsetX;
     const yClick = e.nativeEvent.offsetY;
@@ -16,13 +16,21 @@ const GameImage = () => {
   };
 
   if (!selectedLevel) return null;
-  return <ImgTag src={selectedLevel.image} alt='' onClick={clickImage} />;
+  return (
+    <ImgTag
+      src={selectedLevel.image}
+      alt=''
+      onClick={clickImage}
+      timerRunning={timer.isRunning}
+    />
+  );
 };
 
-const ImgTag = styled.img`
+const ImgTag = styled.img<{ timerRunning: boolean }>`
   width: 100%;
   border-radius: 5px;
   cursor: crosshair;
+  ${(props) => (props.timerRunning ? null : 'display: none;')}
 `;
 
 export default GameImage;
