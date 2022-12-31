@@ -18,6 +18,7 @@ const Header = () => {
               src={user.photoURL ? user.photoURL : ''}
               alt='Profile picture'
               title='Your profile picture'
+              referrerPolicy='no-referrer'
             />
             <button
               type='button'
