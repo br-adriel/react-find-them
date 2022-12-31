@@ -1,4 +1,12 @@
-import { collection, getDocs } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { StopwatchResult, useStopwatch } from 'react-timer-hook';
 import { Character, Level, Match } from '../global/types';
@@ -33,7 +41,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
   const [levels, setLevels] = useState<Level[]>([]);
   const timer = useStopwatch({ autoStart: false });
-  const [match, setMatch] = useState({ points: 0 } as Match);
+  const [match, setMatch] = useState({ points: 0, finished: false } as Match);
   const { user } = useContext(AuthGoogleContext);
 
   useEffect(() => {
@@ -73,15 +81,39 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
     loadLevels();
   }, []);
 
-  const finishLevel = () => {
+  const finishLevel = async () => {
     timer.pause();
     setMatch((prev) => {
       return {
         ...prev,
-        level: selectedLevel,
-        player: user,
+        finished: true,
       };
     });
+    if (user && selectedLevel) {
+      await setDoc(doc(db, 'matches', `${user.uid}-${selectedLevel.id}`), {
+        points: match.points,
+        level: selectedLevel?.id,
+        player: user?.displayName,
+      });
+      const highScoreRef = doc(
+        db,
+        'users',
+        user.uid,
+        'highscores',
+        selectedLevel.id
+      );
+      const highScoreData = await getDoc(highScoreRef);
+      if (highScoreData.exists()) {
+        if (highScoreData.data().points < match.points) {
+          await updateDoc(highScoreRef, { points: match.points });
+        }
+      } else {
+        await setDoc(highScoreRef, {
+          id: selectedLevel.id,
+          points: match.points,
+        });
+      }
+    }
   };
 
   useEffect(() => {
