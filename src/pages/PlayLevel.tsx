@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import CharacterBar from '../components/CharacterBar';
 import GameImage from '../components/GameImage';
 import GameContext from '../contexts/GameContext';
@@ -8,9 +8,11 @@ import Timer from '../components/Timer';
 import styled from 'styled-components';
 import MatchFinished from '../components/MatchFinished';
 import { Level } from '../global/types';
+import AuthGoogleContext from '../contexts/AuthGoogleContext';
 
 const PlayLevel = () => {
   const { levels, setSelectedLevel, match, timer } = useContext(GameContext);
+  const { user } = useContext(AuthGoogleContext);
   const { levelId } = useParams();
 
   useEffect(() => {
@@ -20,6 +22,7 @@ const PlayLevel = () => {
     timer.reset();
   }, [levels]);
 
+  if (!user) return <Navigate to='/' />;
   return (
     <Container>
       {match.finished ? (
