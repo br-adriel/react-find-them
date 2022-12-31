@@ -46,43 +46,6 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
   const [match, setMatch] = useState({ points: 0, finished: false } as Match);
   const { user } = useContext(AuthGoogleContext);
 
-  useEffect(() => {
-    const fetchCharacters = async (levelId: string) => {
-      const collectionCharacterRef = collection(
-        db,
-        'levels',
-        levelId,
-        'characters'
-      );
-      const data = await getDocs(collectionCharacterRef);
-      const characters = data.docs.map((doc) => {
-        return {
-          ...doc.data(),
-          id: doc.id,
-          found: false,
-        };
-      }) as Character[];
-      return characters;
-    };
-    const loadLevels = async () => {
-      const collectionRef = collection(db, 'levels');
-      const data = await getDocs(collectionRef);
-      const fetchedLevels = await Promise.all(
-        data.docs.map(async (doc) => {
-          const characters = await fetchCharacters(doc.id);
-          return {
-            ...doc.data(),
-            id: doc.id,
-            characters,
-          } as unknown as Level;
-        })
-      );
-      setLevels(fetchedLevels);
-    };
-
-    loadLevels();
-  }, []);
-
   const resetGame = () => {
     setSelectedLevel(null);
     setMatch({ finished: false, points: 0 });
@@ -124,23 +87,11 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
     finishLevel;
   };
 
-  useEffect(() => {
-    if (selectedLevel) {
-      let allCharactersFound = true;
-      for (let character of selectedLevel.characters) {
-        if (!character.found) {
-          allCharactersFound = false;
-          break;
-        }
-      }
-      if (allCharactersFound) finishLevel();
-    }
-  }, [selectedLevel]);
-
   const clickLevelImage = (x: number, y: number) => {
     if (selectedLevel && selectedLevel.characters) {
       let clickTime = timer.minutes * 60 + timer.seconds;
       let clickedOnCharacter = false;
+      let characterAlreadyFound = false;
       if (clickTime > 200) clickTime = 200;
 
       for (let character of selectedLevel.characters) {
@@ -151,6 +102,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
           y <= character.position.end.y
         ) {
           clickedOnCharacter = true;
+          characterAlreadyFound = character.found;
           setSelectedLevel((prev) => {
             if (!prev) return null;
             return {
@@ -172,11 +124,63 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
           ...prev,
           points:
             prev.points +
-            (clickedOnCharacter ? 1500 + 200 - clickTime : -150 - clickTime),
+            (clickedOnCharacter && !characterAlreadyFound
+              ? 1500 + 200 - clickTime
+              : -150 - clickTime),
         };
       });
     }
   };
+
+  useEffect(() => {
+    const fetchCharacters = async (levelId: string) => {
+      const collectionCharacterRef = collection(
+        db,
+        'levels',
+        levelId,
+        'characters'
+      );
+      const data = await getDocs(collectionCharacterRef);
+      const characters = data.docs.map((doc) => {
+        return {
+          ...doc.data(),
+          id: doc.id,
+          found: false,
+        };
+      }) as Character[];
+      return characters;
+    };
+    const loadLevels = async () => {
+      const collectionRef = collection(db, 'levels');
+      const data = await getDocs(collectionRef);
+      const fetchedLevels = await Promise.all(
+        data.docs.map(async (doc) => {
+          const characters = await fetchCharacters(doc.id);
+          return {
+            ...doc.data(),
+            id: doc.id,
+            characters,
+          } as unknown as Level;
+        })
+      );
+      setLevels(fetchedLevels);
+    };
+
+    loadLevels();
+  }, []);
+
+  useEffect(() => {
+    if (selectedLevel) {
+      let allCharactersFound = true;
+      for (let character of selectedLevel.characters) {
+        if (!character.found) {
+          allCharactersFound = false;
+          break;
+        }
+      }
+      if (allCharactersFound) finishLevel();
+    }
+  }, [selectedLevel]);
 
   return (
     <GameContext.Provider
