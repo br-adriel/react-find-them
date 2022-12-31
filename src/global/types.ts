@@ -24,7 +24,6 @@ export type Level = {
 };
 
 export type Match = {
-  level: Level | null;
   points: number;
-  player: User | null;
+  finished: boolean;
 };
