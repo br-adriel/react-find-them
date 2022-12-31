@@ -21,6 +21,7 @@ type GameContextProviderType = {
   clickLevelImage: Function;
   timer: StopwatchResult;
   match: Match;
+  resetGame: Function;
 };
 
 const GameContext = createContext<GameContextProviderType>({
@@ -31,6 +32,7 @@ const GameContext = createContext<GameContextProviderType>({
   clickLevelImage: () => {},
   timer: {} as StopwatchResult,
   match: {} as Match,
+  resetGame: () => {},
 });
 
 interface IProps {
@@ -81,6 +83,11 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
     loadLevels();
   }, []);
 
+  const resetGame = () => {
+    setSelectedLevel(null);
+    setMatch({ finished: false, points: 0 });
+  };
+
   const finishLevel = async () => {
     timer.pause();
     setMatch((prev) => {
@@ -114,6 +121,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         });
       }
     }
+    finishLevel;
   };
 
   useEffect(() => {
@@ -180,6 +188,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         clickLevelImage,
         timer,
         match,
+        resetGame,
       }}
     >
       {children}
