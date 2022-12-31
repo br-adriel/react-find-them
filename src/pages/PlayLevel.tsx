@@ -6,24 +6,33 @@ import GameContext from '../contexts/GameContext';
 import Container from '../components/Container';
 import Timer from '../components/Timer';
 import styled from 'styled-components';
+import MatchFinished from '../components/MatchFinished';
+import { Level } from '../global/types';
 
 const PlayLevel = () => {
-  const { levels, setSelectedLevel } = useContext(GameContext);
+  const { levels, setSelectedLevel, match, timer } = useContext(GameContext);
   const { levelId } = useParams();
 
   useEffect(() => {
-    const level = levels.filter((l) => l.id === levelId)[0];
+    const level = levels.filter((l) => l.id === levelId)[0] as Level;
     if (level === undefined && levels.length === 0) setSelectedLevel(null);
-    else setSelectedLevel(level);
+    else setSelectedLevel(JSON.parse(JSON.stringify(level)));
+    timer.reset();
   }, [levels]);
 
   return (
     <Container>
-      <TopBar>
-        <CharacterBar />
-        <Timer />
-      </TopBar>
-      <GameImage />
+      {match.finished ? (
+        <MatchFinished />
+      ) : (
+        <>
+          <TopBar>
+            <CharacterBar />
+            <Timer />
+          </TopBar>
+          <GameImage />
+        </>
+      )}
     </Container>
   );
 };
