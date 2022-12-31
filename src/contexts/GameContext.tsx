@@ -73,7 +73,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
           await updateDoc(highScoreRef, { points: match.points });
           await setDoc(doc(db, 'matches', `${user.uid}-${selectedLevel.id}`), {
             points: match.points,
-            level: selectedLevel?.id,
+            level: { id: selectedLevel?.id, name: selectedLevel?.name },
             player: user?.displayName,
           });
         }
@@ -84,7 +84,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         });
         await setDoc(doc(db, 'matches', `${user.uid}-${selectedLevel.id}`), {
           points: match.points,
-          level: selectedLevel?.id,
+          level: { id: selectedLevel?.id, name: selectedLevel?.name },
           player: user?.displayName,
         });
       }
