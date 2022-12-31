@@ -1,7 +1,7 @@
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from '../components/Container';
 import RankingLevelSelector from '../components/RankingLevelSelector';
-import { Navigate, useParams } from 'react-router-dom';
 
 const Ranking = () => {
   let { levelId } = useParams();
