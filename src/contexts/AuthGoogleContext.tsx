@@ -5,8 +5,9 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import React, { createContext, useEffect, useState } from 'react';
-import { app } from '../services/firebase.config';
+import { app, db } from '../services/firebase.config';
 
 type AuthGoogleProviderType = {
   user: User | null;
@@ -50,6 +51,12 @@ export const AuthGoogleProvider: React.FC<IProps> = ({ children }) => {
         if (token) {
           sessionStorage.setItem('@AuthFirebase:token', token);
           sessionStorage.setItem('@AuthFirebase:user', JSON.stringify(user));
+
+          const userData = {
+            name: user.displayName,
+          };
+          const docRef = doc(db, 'users', user.uid);
+          await setDoc(docRef, userData, { merge: true });
         }
       })
       .catch((error) => {
