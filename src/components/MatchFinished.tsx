@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { Clock, Star } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import GameContext from '../contexts/GameContext';
-import { useNavigate } from 'react-router-dom';
 
 const MatchFinished = () => {
   const { match, timer } = useContext(GameContext);
@@ -12,7 +12,7 @@ const MatchFinished = () => {
   };
   return (
     <Wrapper>
-      <h3>Match finished!</h3>
+      <h3>Level finished!</h3>
       <div>
         <MatchInfo>
           <h4>
