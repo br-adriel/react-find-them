@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import App from '../App';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
@@ -8,7 +8,7 @@ import SelectLevel from '../pages/SelectLevel';
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter basename='/react-find-them/'>
+    <HashRouter>
       <Routes>
         <Route path='/' element={<App />}>
           <Route path='' element={<Home />} />
@@ -19,7 +19,7 @@ const AppRoutes = () => {
           <Route path='*' element={<NotFound />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
