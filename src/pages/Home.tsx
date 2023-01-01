@@ -1,18 +1,36 @@
 import { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import AuthGoogleContext from '../contexts/AuthGoogleContext';
+import styled from 'styled-components';
+import Container from '../components/Container';
+import RankingList from '../components/RankingList';
+import Welcome from '../components/Welcome';
 import GameContext from '../contexts/GameContext';
 
 const Home = () => {
-  const { user } = useContext(AuthGoogleContext);
   const { resetGame } = useContext(GameContext);
 
   useEffect(() => {
     resetGame();
   }, []);
 
-  if (user) return <Link to='/play'>Play</Link>;
-  return <h2>Sign in to play</h2>;
+  return (
+    <Container>
+      <Wrapper>
+        <Welcome />
+        <RankingList levelId='all' />
+      </Wrapper>
+    </Container>
+  );
 };
+
+const Wrapper = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 2fr 4fr;
+  }
+`;
 
 export default Home;
