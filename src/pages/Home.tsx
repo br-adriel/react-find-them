@@ -1,4 +1,5 @@
 import { useContext, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components';
 import Container from '../components/Container';
 import RankingList from '../components/RankingList';
@@ -13,12 +14,22 @@ const Home = () => {
   }, []);
 
   return (
-    <Container>
-      <Wrapper>
-        <Welcome />
-        <RankingList levelId='all' />
-      </Wrapper>
-    </Container>
+    <>
+      <Helmet>
+        <title>FindThem!</title>
+        <meta
+          name='description'
+          content="Game where you need to find characters on a image, similar to Where's Wally?"
+        />
+      </Helmet>
+      ;
+      <Container>
+        <Wrapper>
+          <Welcome />
+          <RankingList levelId='all' />
+        </Wrapper>
+      </Container>
+    </>
   );
 };
 
