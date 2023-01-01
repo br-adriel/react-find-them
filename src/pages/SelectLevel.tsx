@@ -1,4 +1,5 @@
 import { useContext, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Navigate } from 'react-router-dom';
 import Container from '../components/Container';
 import LevelSelector from '../components/LevelSelector';
@@ -15,9 +16,15 @@ const SelectLevel = () => {
 
   if (!user) return <Navigate to='/' />;
   return (
-    <Container>
-      <LevelSelector />
-    </Container>
+    <>
+      <Helmet>
+        <title>Select a level</title>
+        <meta name='description' content='Select a level to start playing' />
+      </Helmet>
+      <Container>
+        <LevelSelector />
+      </Container>
+    </>
   );
 };
 

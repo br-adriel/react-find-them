@@ -1,17 +1,19 @@
 import { useContext, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Navigate, useParams } from 'react-router-dom';
-import CharacterBar from '../components/CharacterBar';
-import GameImage from '../components/GameImage';
-import GameContext from '../contexts/GameContext';
-import Container from '../components/Container';
-import Timer from '../components/Timer';
 import styled from 'styled-components';
+import CharacterBar from '../components/CharacterBar';
+import Container from '../components/Container';
+import GameImage from '../components/GameImage';
 import MatchFinished from '../components/MatchFinished';
-import { Level } from '../global/types';
+import Timer from '../components/Timer';
 import AuthGoogleContext from '../contexts/AuthGoogleContext';
+import GameContext from '../contexts/GameContext';
+import { Level } from '../global/types';
 
 const PlayLevel = () => {
-  const { levels, setSelectedLevel, match, timer } = useContext(GameContext);
+  const { levels, setSelectedLevel, match, timer, selectedLevel } =
+    useContext(GameContext);
   const { user } = useContext(AuthGoogleContext);
   const { levelId } = useParams();
 
@@ -24,19 +26,28 @@ const PlayLevel = () => {
 
   if (!user) return <Navigate to='/' />;
   return (
-    <Container>
-      {match.finished ? (
-        <MatchFinished />
-      ) : (
-        <>
-          <TopBar>
-            <CharacterBar />
-            <Timer />
-          </TopBar>
-          <GameImage />
-        </>
-      )}
-    </Container>
+    <>
+      <Helmet>
+        <title>{`Playing ${selectedLevel?.name}`}</title>
+        <meta
+          name='description'
+          content='Find all the characters of this level'
+        />
+      </Helmet>
+      <Container>
+        {match.finished ? (
+          <MatchFinished />
+        ) : (
+          <>
+            <TopBar>
+              <CharacterBar />
+              <Timer />
+            </TopBar>
+            <GameImage />
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 

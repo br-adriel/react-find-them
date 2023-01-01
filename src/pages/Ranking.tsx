@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Container from '../components/Container';
@@ -8,12 +9,21 @@ const Ranking = () => {
   let { levelId } = useParams();
   if (!levelId) levelId = ' ';
   return (
-    <Container>
-      <Wrapper>
-        <RankingLevelSelector currentId={levelId} />
-        <RankingList levelId={levelId} />
-      </Wrapper>
-    </Container>
+    <>
+      <Helmet>
+        <title>Leaderboard</title>
+        <meta
+          name='description'
+          content='Ranking with the best players of each level'
+        />
+      </Helmet>
+      <Container>
+        <Wrapper>
+          <RankingLevelSelector currentId={levelId} />
+          <RankingList levelId={levelId} />
+        </Wrapper>
+      </Container>
+    </>
   );
 };
 

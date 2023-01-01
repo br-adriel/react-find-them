@@ -1,3 +1,4 @@
+import { HelmetProvider } from 'react-helmet-async';
 import { Outlet } from 'react-router-dom';
 import Footer from './components/Footer';
 import { GlobalStyle } from './components/GlobalStyle';
@@ -7,7 +8,7 @@ import { GameContextProvider } from './contexts/GameContext';
 
 function App() {
   return (
-    <>
+    <HelmetProvider>
       <GlobalStyle />
       <AuthGoogleProvider>
         <GameContextProvider>
@@ -18,7 +19,7 @@ function App() {
           <Footer />
         </GameContextProvider>
       </AuthGoogleProvider>
-    </>
+    </HelmetProvider>
   );
 }
 
