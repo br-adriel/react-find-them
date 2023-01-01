@@ -91,12 +91,17 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         }
       } else {
         await setDoc(highScoreRef, {
-          id: selectedLevel.id,
+          level: { id: selectedLevel?.id, name: selectedLevel?.name },
+          points: match.points,
+        });
+        await setDoc(doc(db, 'matches', `${user.uid}-${selectedLevel.id}`), {
           points: match.points,
           time: {
             minutes: timer.minutes,
             seconds: timer.seconds,
           },
+          level: { id: selectedLevel?.id, name: selectedLevel?.name },
+          player: user?.displayName,
         });
       }
     }
