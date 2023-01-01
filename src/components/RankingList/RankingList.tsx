@@ -13,7 +13,7 @@ const RankingList: React.FC<{ levelId: string }> = ({ levelId }) => {
     };
 
     getHighscores();
-  }, []);
+  }, [levelId]);
 
   if (!highscores)
     return (
