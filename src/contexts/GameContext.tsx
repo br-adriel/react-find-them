@@ -59,6 +59,18 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
       };
     });
     if (user && selectedLevel) {
+      await setDoc(doc(db, 'matches', `${user.uid}-${selectedLevel.id}`), {
+        points: match.points,
+        level: {
+          id: selectedLevel.id,
+          name: selectedLevel.name,
+        },
+        player: user?.displayName,
+        time: {
+          minutes: timer.minutes,
+          seconds: timer.seconds,
+        },
+      });
       const highScoreRef = doc(
         db,
         'users',
@@ -69,11 +81,12 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
       const highScoreData = await getDoc(highScoreRef);
       if (highScoreData.exists()) {
         if (highScoreData.data().points < match.points) {
-          await updateDoc(highScoreRef, { points: match.points });
-          await setDoc(doc(db, 'matches', `${user.uid}-${selectedLevel.id}`), {
+          await updateDoc(highScoreRef, {
             points: match.points,
-            level: { id: selectedLevel?.id, name: selectedLevel?.name },
-            player: user?.displayName,
+            time: {
+              minutes: timer.minutes,
+              seconds: timer.seconds,
+            },
           });
         }
       } else {
@@ -83,6 +96,10 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         });
         await setDoc(doc(db, 'matches', `${user.uid}-${selectedLevel.id}`), {
           points: match.points,
+          time: {
+            minutes: timer.minutes,
+            seconds: timer.seconds,
+          },
           level: { id: selectedLevel?.id, name: selectedLevel?.name },
           player: user?.displayName,
         });

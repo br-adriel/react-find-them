@@ -27,3 +27,17 @@ export type Match = {
   points: number;
   finished: boolean;
 };
+
+export type Highscore = {
+  id: string;
+  level: {
+    id: string;
+    name: string;
+  };
+  player: string;
+  points: number;
+  time: {
+    minutes: number;
+    seconds: number;
+  };
+};
