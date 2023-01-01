@@ -6,6 +6,7 @@ import CharacterBar from '../components/CharacterBar';
 import Container from '../components/Container';
 import GameImage from '../components/GameImage';
 import MatchFinished from '../components/MatchFinished';
+import RankingList from '../components/RankingList';
 import Timer from '../components/Timer';
 import AuthGoogleContext from '../contexts/AuthGoogleContext';
 import GameContext from '../contexts/GameContext';
@@ -36,7 +37,10 @@ const PlayLevel = () => {
       </Helmet>
       <Container>
         {match.finished ? (
-          <MatchFinished />
+          <Wrapper>
+            <MatchFinished />
+            <RankingList levelId={levelId!} />
+          </Wrapper>
         ) : (
           <>
             <TopBar>
@@ -60,6 +64,12 @@ const TopBar = styled.div`
   margin-bottom: 10px;
   justify-content: space-between;
   align-items: stretch;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 export default PlayLevel;
