@@ -8,7 +8,7 @@ import SelectLevel from '../pages/SelectLevel';
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/react-find-them/'>
       <Routes>
         <Route path='/' element={<App />}>
           <Route path='' element={<Home />} />
