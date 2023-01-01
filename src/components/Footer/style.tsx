@@ -4,6 +4,8 @@ export const FooterTag = styled.footer`
   padding: 10px;
   background: var(--bg-0);
   color: #fff;
+  display: flex;
+  justify-content: center;
 
   & > div {
     display: flex;
