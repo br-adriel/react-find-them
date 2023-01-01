@@ -8,6 +8,9 @@ import {
 } from 'firebase/firestore';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { StopwatchResult, useStopwatch } from 'react-timer-hook';
+import level_complete_audio from '../assets/audio/level_complete.mp3';
+import right_click_audio from '../assets/audio/right.mp3';
+import wrong_click_audio from '../assets/audio/wrong.mp3';
 import { Character, Level, Match } from '../global/types';
 import { db } from '../services/firebase.config';
 import AuthGoogleContext from './AuthGoogleContext';
@@ -44,6 +47,9 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
   const timer = useStopwatch({ autoStart: false });
   const [match, setMatch] = useState({ points: 0, finished: false } as Match);
   const { user } = useContext(AuthGoogleContext);
+  const LevelCompleteAudio = new Audio(level_complete_audio);
+  const RightClickAudio = new Audio(right_click_audio);
+  const WrongClickAudio = new Audio(wrong_click_audio);
 
   const resetGame = () => {
     setSelectedLevel(null);
@@ -105,7 +111,7 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         });
       }
     }
-    finishLevel;
+    LevelCompleteAudio.play();
   };
 
   const clickLevelImage = (x: number, y: number) => {
@@ -140,14 +146,18 @@ export const GameContextProvider: React.FC<IProps> = ({ children }) => {
         }
       }
 
+      let pointsIncrement = 0;
+      if (clickedOnCharacter && !characterAlreadyFound) {
+        RightClickAudio.play();
+        pointsIncrement = 1500 + 200 - clickTime;
+      } else {
+        WrongClickAudio.play();
+        pointsIncrement = -150 - clickTime;
+      }
       setMatch((prev) => {
         return {
           ...prev,
-          points:
-            prev.points +
-            (clickedOnCharacter && !characterAlreadyFound
-              ? 1500 + 200 - clickTime
-              : -150 - clickTime),
+          points: prev.points + pointsIncrement,
         };
       });
     }
