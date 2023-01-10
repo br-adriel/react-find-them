@@ -22,7 +22,6 @@ const Home = () => {
           content="Game where you need to find characters on a image, similar to Where's Wally?"
         />
       </Helmet>
-      ;
       <Container>
         <Wrapper>
           <Welcome />
@@ -38,6 +37,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
+  align-items: start;
 
   @media screen and (min-width: 768px) {
     grid-template-columns: 2fr 4fr;
