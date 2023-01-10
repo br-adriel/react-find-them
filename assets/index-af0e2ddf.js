@@ -223,11 +223,12 @@ import{j as z,r as c,R as Z}from"./react-95444d27.js";import{c as V}from"./react
     display: flex;
     justify-content: center;
   }
-`,De=()=>{const{resetGame:t}=c.useContext(f);return c.useEffect(()=>{t()},[]),i(L,{children:[i(P,{children:[e("title",{children:"FindThem!"}),e("meta",{name:"description",content:"Game where you need to find characters on a image, similar to Where's Wally?"})]}),";",e(S,{children:i(Ye,{children:[e(Ue,{}),e(B,{levelId:"all"})]})})]})},Ye=d.div`
+`,De=()=>{const{resetGame:t}=c.useContext(f);return c.useEffect(()=>{t()},[]),i(L,{children:[i(P,{children:[e("title",{children:"FindThem!"}),e("meta",{name:"description",content:"Game where you need to find characters on a image, similar to Where's Wally?"})]}),e(S,{children:i(Ye,{children:[e(Ue,{}),e(B,{levelId:"all"})]})})]})},Ye=d.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
+  align-items: start;
 
   @media screen and (min-width: 768px) {
     grid-template-columns: 2fr 4fr;
